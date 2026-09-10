@@ -1,44 +1,54 @@
-name: Deploy Ren Sanctuary Blog
+name: Deploy Svelte to GitHub Pages
 
 on:
   push:
-    branches: [ main ] # Change 'main' to 'master' if your default branch is named master
+    branches: [ Default ]  # or your default branch
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      # 1. Checkout the code repository
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
         with:
-          fetch-depth: 0 # Fetch all history for accurate deployment
+          node-version: 20
+          cache: 'npm'
 
-      # 2. Setup Ruby environment (required for Jekyll)
-      - name: Set up Ruby
-        uses: ruby/actions/setup-ruby@v1
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
         with:
-          ruby-version: '3.0' # Use a recent, stable version
+          path: ./dist  # Vite builds to dist by default
 
-      # 3. Install Dependencies (Requires Gemfile and Bundler)
-      - name: Install Dependencies
-        run: |
-          bundle install --gemfile Gemfile
-          echo "Dependencies installed successfully."
-
-      # 4. Build the Site using Jekyll
-      - name: Build Website
-        run: |
-          # This command reads _config.yml, runs all templates, and outputs static HTML to the '_site' directory.
-          bundle exec jekyll build
-
-      # 5. Deploy to GitHub Pages
-      - name: Setup Pages Deployment Directory
-        run: |
-          mkdir -p _site/docs # Assuming Jekyll output is redirected here, adjust as needed
-
-      - name: Deploy static files
-        uses: peaceiris/actions-rsync@v2
-        with:
-          source: ./_site # Source directory containing compiled HTML
-          target: ${{ github.pages }}/ # Target GitHub Pages deployment folder
-          publish: true
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

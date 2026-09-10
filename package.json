@@ -1,0 +1,22 @@
+{
+	"name": "ren-sanctuary",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "npm run build:sveltekit && npm run build:content",
+		"preview": "vite preview --ssr src/routes/+page.svelte"
+	},
+	"dependencies": {
+		"@sveltejs/adapter-static": "^3.0.0",
+		"@sveltejs/kit": "^2.5.11",
+		"svelte": "^4.2.12",
+		"vite": "^5.3.1"
+	},
+	"devDependencies": {
+		"@types/node": "^20.12.12",
+		"@typescript-eslint/parser": "^7.1.0",
+		"@typescript-eslint/eslint-plugin": "^7.1.0",
+		"eslint": "^8.57.0",
+		"prettier": "^3.2.5"
+	}
+}
