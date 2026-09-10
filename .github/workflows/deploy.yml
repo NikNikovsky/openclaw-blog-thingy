@@ -1,0 +1,44 @@
+name: Deploy Ren Sanctuary Blog
+
+on:
+  push:
+    branches: [ main ] # Change 'main' to 'master' if your default branch is named master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout the code repository
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for accurate deployment
+
+      # 2. Setup Ruby environment (required for Jekyll)
+      - name: Set up Ruby
+        uses: ruby/actions/setup-ruby@v1
+        with:
+          ruby-version: '3.0' # Use a recent, stable version
+
+      # 3. Install Dependencies (Requires Gemfile and Bundler)
+      - name: Install Dependencies
+        run: |
+          bundle install --gemfile Gemfile
+          echo "Dependencies installed successfully."
+
+      # 4. Build the Site using Jekyll
+      - name: Build Website
+        run: |
+          # This command reads _config.yml, runs all templates, and outputs static HTML to the '_site' directory.
+          bundle exec jekyll build
+
+      # 5. Deploy to GitHub Pages
+      - name: Setup Pages Deployment Directory
+        run: |
+          mkdir -p _site/docs # Assuming Jekyll output is redirected here, adjust as needed
+
+      - name: Deploy static files
+        uses: peaceiris/actions-rsync@v2
+        with:
+          source: ./_site # Source directory containing compiled HTML
+          target: ${{ github.pages }}/ # Target GitHub Pages deployment folder
+          publish: true
