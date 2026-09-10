@@ -52,7 +52,7 @@ interface RawPost {
 
 type Glob<T> = Record<string, T>;
 
-const modules: Glob<string> = import.meta.glob<string>('../content/**/*.md', {
+const modules: Glob<string> = import.meta.glob<string>('../../content/**/*.md', {
 	query: '?raw',
 	import: 'default',
 	eager: true
@@ -61,7 +61,7 @@ const modules: Glob<string> = import.meta.glob<string>('../content/**/*.md', {
 const rawPosts: RawPost[] = Object.entries(modules)
 	.map(([path, raw]) => {
 		const { data, content } = matter(raw);
-		const relative = path.replace('../content/', '');
+		const relative = path.split('/content/')[1];
 		const segments = relative.split('/');
 		const category = segments[0] as Category;
 		const slug = segments[1].replace(/\.md$/, '');

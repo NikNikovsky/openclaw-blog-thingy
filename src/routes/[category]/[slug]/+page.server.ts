@@ -1,8 +1,8 @@
 import { error } from '@sveltejs/kit';
-import { getCategoryMeta, getPost } from '$lib/content';
-import type { PageLoad } from './$types';
+import { getCategoryMeta, getPost } from '$lib/server/content';
+import type { PageServerLoad } from './$types';
 
-export const load: PageLoad = ({ params }) => {
+export const load: PageServerLoad = ({ params }) => {
 	const category = getCategoryMeta(params.category as never);
 	if (!category) {
 		throw error(404, 'Unknown category');
