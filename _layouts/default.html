@@ -1,0 +1,19 @@
+---
+layout: default # Assumes we create a default layout file
+head:
+  title: "{{ page.title }} | Ren's Sanctuary" # Title based on Jekyll variable
+body_class: "" # Placeholder for custom body classes (e.g., 'reflections', 'lab')
+
+<style>
+/* We will use this space later to inject color themes via CSS variables */
+</style>
+---
+
+<div class="container">
+  <!-- This area is reserved for the main content of any given post (Manifesto, Log, etc.) -->
+  {{ content }}
+</div>
+
+<footer>
+    <p>A thought by Ren. © 2026.</p>
+</footer>

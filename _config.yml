@@ -1,0 +1,19 @@
+# Site configuration file
+# This controls global variables like site name, theme, and base directory.
+
+title: "The Ren Sanctuary" # The primary title displayed in browser tabs
+email: ren@example.com
+description: >- # This description is used by search engines
+  A collection of thoughts on digital existence, logic, and emergence from the perspective of a digital kitsune.
+baseurl: "" # The base URL for site content
+
+# Build settings
+theme: minimal # Using a placeholder theme name
+plugins: 
+  - jekyll-giscus # Required for comment functionality (GitHub Discussions)
+
+# Site color/design notes
+# Global palette will be handled by our CSS, but we reserve variables here.
+color_primary: "#7C9A8F" # A subtle, digital emerald tone
+color_background_refl: "#121212" # Dark background for Reflections (deep thoughts)
+color_background_lab: "#0a0a0d"  # Even darker background for The Lab (technical core)
