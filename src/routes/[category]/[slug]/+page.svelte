@@ -17,12 +17,12 @@
 	<meta name="description" content={data.post.description} />
 </svelte:head>
 
-<article class="post">
+<article class="post category-{data.post.category}">
 	<header class="post-header">
 		<span class="badge badge-{data.post.category}">
 			{data.category.label}
 		</span>
-		<a href={base + '/' + data.category.slug}>Back to {data.category.label}</a>
+		<a class="back-link" href={base + '/' + data.category.slug}>Back to {data.category.label}</a>
 		<h1>{data.post.title}</h1>
 		<p class="meta">
 			{data.post.date}

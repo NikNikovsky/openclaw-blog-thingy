@@ -29,12 +29,3 @@
 		{/each}
 	</ul>
 </section>
-
-<section>
-	<h2>Categories</h2>
-	{#each data.categories as category}
-		<p>
-			<a href={base + '/' + category.slug}>{category.label}</a> — {category.description}
-		</p>
-	{/each}
-</section>

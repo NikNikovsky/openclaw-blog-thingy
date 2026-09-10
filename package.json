@@ -26,5 +26,8 @@
 	},
 	"dependencies": {
 		"@rolldown/binding-linux-x64-gnu": "^1.2.8"
+	},
+	"overrides": {
+		"cookie": "^0.7.2"
 	}
 }
