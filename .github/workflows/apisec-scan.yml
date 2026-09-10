@@ -54,18 +54,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-       - name: APIsec scan
-         uses: apisec-inc/apisec-run-scan@025432089674a28ba8fb55f8ab06c10215e772ea
-         with:
+      - name: Check APIsec credentials
+        id: apisec-creds
+        run: |
+          if [[ -n "${{ secrets.APISEC_USERNAME || secrets.apisec_username }}" && -n "${{ secrets.APISEC_PASSWORD || secrets.apisec_password }}" ]]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "APIsec credentials are not configured. Skipping scan."
+          fi
+      - name: APIsec scan
+        if: steps.apisec-creds.outputs.configured == 'true'
+        uses: apisec-inc/apisec-run-scan@025432089674a28ba8fb55f8ab06c10215e772ea
+        with:
           # The APIsec username with which the scans will be executed
-          apisec-username: ${{ secrets.apisec_username }}
+          apisec-username: ${{ secrets.APISEC_USERNAME || secrets.apisec_username }}
           # The Password of the APIsec user with which the scans will be executed
-          apisec-password: ${{ secrets.apisec_password}}
+          apisec-password: ${{ secrets.APISEC_PASSWORD || secrets.apisec_password }}
           # The name of the project for security scan
           apisec-project: "VAmPI"
           # The name of the sarif format result file The file is written only if this property is provided.
           sarif-result-file: "apisec-results.sarif"
-       - name: Import results
-         uses: github/codeql-action/upload-sarif@v3
-         with:
+      - name: Import results
+        if: hashFiles('apisec-results.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
           sarif_file: ./apisec-results.sarif
