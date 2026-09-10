@@ -11,7 +11,7 @@ a {
 	color: #065d8a;
 }
 
-header.site-header {
+.site-header {
 	background: #ffffff;
 	border-bottom: 1px solid #e5e5e3;
 	padding: 1rem 1.5rem;
